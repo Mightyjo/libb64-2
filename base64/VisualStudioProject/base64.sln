@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C++ Express 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "base64", "base64.vcxproj", "{0B094121-DC64-4D74-AFA0-750B83F800D0}"
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "base64", "base64.vcproj", "{9D65ADBA-0DB6-4A92-BAFD-8847681EE893}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0B094121-DC64-4D74-AFA0-750B83F800D0}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0B094121-DC64-4D74-AFA0-750B83F800D0}.Debug|Win32.Build.0 = Debug|Win32
-		{0B094121-DC64-4D74-AFA0-750B83F800D0}.Release|Win32.ActiveCfg = Release|Win32
-		{0B094121-DC64-4D74-AFA0-750B83F800D0}.Release|Win32.Build.0 = Release|Win32
+		{9D65ADBA-0DB6-4A92-BAFD-8847681EE893}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9D65ADBA-0DB6-4A92-BAFD-8847681EE893}.Debug|Win32.Build.0 = Debug|Win32
+		{9D65ADBA-0DB6-4A92-BAFD-8847681EE893}.Release|Win32.ActiveCfg = Release|Win32
+		{9D65ADBA-0DB6-4A92-BAFD-8847681EE893}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

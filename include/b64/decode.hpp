@@ -2,8 +2,25 @@
 /*
 decode.h - c++ wrapper for a base64 decoding algorithm
 
-This is part of the libb64 project, and has been placed in the public domain.
-For details, see http://sourceforge.net/projects/libb64
+Copyright 2012 Joseph R. Langley
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
+Derived from the libb64 project written and dedicated to the public
+domain by Chris Venter.
+http://libb64.sourceforge.net/
+
 */
 #ifndef BASE64_DECODE_H
 #define BASE64_DECODE_H
@@ -50,7 +67,10 @@ namespace base64
 			{
 				istream_in.read((char*)code, N);
 				codelength = istream_in.gcount();
-				plainlength = decode(code, codelength, plaintext);
+				if( (plainlength = decode(code, codelength, plaintext)) < 0 ) {
+					std::cerr << "Breaking because of invalid encoded characters." << std::endl;
+					break;
+				}
 				ostream_in.write((const char*)plaintext, plainlength);
 			}
 			while (istream_in.good() && codelength > 0);

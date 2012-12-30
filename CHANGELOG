@@ -3,6 +3,28 @@ libb64: Base64 Encoding/Decoding Routines
 
 ## Changelog ##
 
+Version 2.0 Release
+-------------------
+Brought the library into compliance with RFC 4648.
+http://tools.ietf.org/html/rfc4648
+This implementation ignores CRLF and other newline sequences adjacent to the
+data stream.
+This implementation does not add newlines to the encoded data stream.
+This implementation rejects encoded data streams that contain invalid
+characters.  Decoding aborts and returns -1 (unless the called method returns
+void).
+
+Refactored the library into a "header library."  With a header library,
+there's no object to link.  Simply include the header and use the functions.
+
+Recreated the Visual Studio solution in VS C++ Express 2008 edition for
+additional compatibility. (2010 edition automatically upgrades earlier solutions.
+
+Placed the update library under the Apache License, Version 2.0.  The Creative
+Commons retired the Public Domain Dedication and Certification in 2010.  Chose
+the Apache License v2 over public domain dedication in order to ensure patent
+and trademark licenses are freely available to users in addition to the code.
+
 Version 1.2 Release
 -------------------
 Removed the b64dec, b64enc, encoder and decoder programs in favour of

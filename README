@@ -3,9 +3,9 @@ b64: Base64 Encoding/Decoding Routines
 
 Overview:
 --------
-libb64 is a library of ANSI C routines for fast encoding/decoding data into and
-from a base64-encoded format. C++ wrappers are included, as well as the source
-code for standalone encoding and decoding executables.
+libb64 is a header library of ANSI C routines for fast encoding/decoding data
+into and from a base64-encoded format. C++ wrappers are included, as well as
+the source code for standalone encoding and decoding executables.
 
 base64 consists of ASCII text, and is therefore a useful encoding for storing 
 binary data in a text file, such as xml, or sending binary data over text-only
@@ -19,7 +19,8 @@ References:
 	http://www.fourmilab.ch/webtools/base64/
 
 Why?
----
+----
+[by libb64 author Chris Venter]
 I did this because I need an implementation of base64 encoding and decoding,
 without any licensing problems. Most OS implementations are released under
 either the GNU/GPL, or a BSD-variant, which is not what I require.
@@ -30,19 +31,7 @@ For more information on this technique, see "Coroutines in C", by Simon Tatham,
 which can be found online here: 
 http://www.chiark.greenend.org.uk/~sgtatham/coroutines.html
 
-So then, under which license do I release this code? On to the next section...
-
-License:
--------
-This work is released under into the Public Domain.
-It basically boils down to this: I put this work in the public domain, and you
-can take it and do whatever you want with it.
-
-An example of this "license" is the Creative Commons Public Domain License, a
-copy of which can be found in the LICENSE file, and also online at
-http://creativecommons.org/licenses/publicdomain/
-
-Commandline Use:
+base64 Commandline Use:
 ---------------
 There is a new executable available, it is simply called base64.
 It can encode and decode files, as instructed by the user.
@@ -57,10 +46,15 @@ filec will now be identical to filea.
 
 Programming:
 -----------
-Some C++ wrappers are provided as well, so you don't have to get your hands
+The header library is written in C.  Simply include cencode.h and cdecode.h
+in your C sources to get started.  The libary does not allocate memory.  You
+provide the input and output buffers as pointers to char.  Remember that
+Base64 encodes n octects in 4n/3 chars.
+
+C++ wrappers are provided as well, so you don't have to get your hands
 dirty. Encoding from standard input to standard output is as simple as
 
-	#include <b64/encode.h>
+	#include <b64/encode.hpp>
 	#include <iostream>
 	int main()
 	{
@@ -69,10 +63,18 @@ dirty. Encoding from standard input to standard output is as simple as
 		return 0;
 	}
 
-Both standalone executables and a static library is provided in the package,
+The encode method takes any istream and ostream, and uses the get() and put()
+methods to read/write each octet.
+	
+The standalone executable, base64, demonstrates the use of the header library
+found in include/b64.  The header library does not require linking, simply
+include the encoder or decoder headers wherever you need them.  Include the .h
+files in C code and the .hpp files in C++.  The .hpp files pull in the C headers
+for you, too.
 
 Implementation:
 --------------
+[by libb64 author Chris Venter]
 It is DAMN fast, if I may say so myself. The C code uses a little trick which
 has been used to implement coroutines, of which one can say that this
 implementation is an example.

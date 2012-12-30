@@ -15,7 +15,7 @@ CFLAGS += -O3
 #BUFFERSIZE = 65536
 BUFFERSIZE = 16777216
 
-SOURCES = base64.cc
+SOURCES = base64.cpp
 
 TARGETS = $(BINARIES)
 
@@ -28,7 +28,6 @@ CFLAGS += -I../include
 CXXFLAGS += $(CFLAGS)
 
 vpath %.h ../include/b64
-vpath %.a ../src
 
 .PHONY : clean
 

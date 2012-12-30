@@ -1,4 +1,4 @@
-DEBRIS = base64.sdf base64.suo base64.vcxproj.user
+DEBRIS = base64.sdf base64.suo base64.vcxproj.user base64.ncb
 
 all:
 

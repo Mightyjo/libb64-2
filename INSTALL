@@ -39,6 +39,9 @@ Since the current targets are a standalone executable and a static library
 (fancy name for archive) with some headers, an install script has not been implemented yet.
 Simply copy the executable into your path, and use it.
 
+Copy the include/b64 directory somewhere sane, like /usr/local/include.  It's recommended
+you copy the entire b64/ directory structure to the install path, not just the headers.
+
 --
 peace out
 Chris
