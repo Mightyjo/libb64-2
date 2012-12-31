@@ -31,10 +31,10 @@ http://libb64.sourceforge.net/
 
 typedef enum
 {
-    step_a,
-    step_b,
-    step_c,
-    step_d
+    step_a, /* 1st encoded char of a 3-octet block */
+    step_b, /* 2nd encoded char of a 3-octet block */
+    step_c, /* 3rd encoded char of a 3-octet block */
+    step_d  /* 4th encoded char of a 3-octet block */
 } base64_decodestep;
 
 typedef struct
@@ -70,6 +70,11 @@ int base64_decode_value( char value_in ) {
      * decimal values for all the code points between ASCII '+' and 'z'.
      * Those that aren't valid Base64 characters return -1 so we can
      * detect the input error in the base64_decode_block() function.
+     *
+     * Finally, the -2 at offset 18 in the decoding array marks the
+     * position of ASCII '=', the padding character specified by RFC4648.
+     * Finding that means we're in the padding at the end of an encoded
+     * stream.
      */
     static const char decoding[] = {
         62,-1,-1,-1,63,52,53,54,55,56,57,58,59,60,
@@ -111,15 +116,22 @@ int base64_decode_block( const char* code_in,
         {
     case step_a:
             do {
+                /* Handle the end of an encoded block. */
+                /* Note: codechar points at the byte   */
+                /* after the end of code_in.           */
                 if (codechar == code_in+length_in)
                 {
                     state_in->step = step_a;
                     state_in->plainchar = *plainchar;
+                    /* Return the number of decoded bytes */
                     return plainchar - plaintext_out;
                 }
+                /* Handle any encoded character */
                 fragment = (char)base64_decode_value(*codechar++);
-                if( fragment == -1 ) goto error;
-            } while( fragment < -1 );
+                if( fragment == -1 ) goto error; /* Invalid encoding found   */
+            } while( fragment < -1 ); /* Loop through the padding at the end */
+                                      /* of an encoded block.                */
+            /* Get the six most significant bits of the first encoded octet  */
             *plainchar    = (fragment & 0x03f) << 2;
     case step_b:
             do {
@@ -132,7 +144,9 @@ int base64_decode_block( const char* code_in,
                 fragment = (char)base64_decode_value(*codechar++);
                 if( fragment == -1 ) goto error;
             } while( fragment < -1 );
+            /* Get the two least significant bits of the first encoded octet */
             *plainchar++ |= (fragment & 0x030) >> 4;
+            /* Get the four msb of the second encoded octet */
             *plainchar    = (fragment & 0x00f) << 4;
     case step_c:
             do {
@@ -145,7 +159,9 @@ int base64_decode_block( const char* code_in,
                 fragment = (char)base64_decode_value(*codechar++);
                 if( fragment == -1 ) goto error;
             } while( fragment < -1 );
+            /* Get the four lsb of the second encoded octet */
             *plainchar++ |= (fragment & 0x03c) >> 2;
+            /* Get the two msb of the third encoded octet */
             *plainchar    = (fragment & 0x003) << 6;
     case step_d:
             do {
@@ -158,6 +174,7 @@ int base64_decode_block( const char* code_in,
                 fragment = (char)base64_decode_value(*codechar++);
                 if( fragment == -1 ) goto error;
             } while( fragment < -1 );
+            /* Ger the four lsb of the third encoded octet */
             *plainchar++   |= (fragment & 0x03f);
         }
 error:

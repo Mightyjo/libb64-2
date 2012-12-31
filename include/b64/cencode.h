@@ -31,16 +31,15 @@ http://libb64.sourceforge.net/
 
 typedef enum
 {
-    step_A,
-    step_B,
-    step_C
+    step_A, /* 1st octet of a 3-octet block */
+    step_B, /* 2nd octet of a 3-octet block */
+    step_C  /* 3rd octet of a 3-octet block */
 } base64_encodestep;
 
 typedef struct
 {
     base64_encodestep step;
     char result;
-    int stepcount;
 } base64_encodestate;
 
 void base64_init_encodestate( base64_encodestate* state_in );
@@ -59,12 +58,9 @@ int base64_encode_blockend( char* code_out,
  * Definitions
  */ 
 
-/* const int CHARS_PER_LINE = 72; */
-
 void base64_init_encodestate( base64_encodestate* state_in ) {
     state_in->step = step_A;
     state_in->result = 0;
-/*	state_in->stepcount = 0; */
 }
 
 char base64_encode_value( char value_in ) {
@@ -150,7 +146,6 @@ int base64_encode_blockend( char* code_out,
     case step_A:
         break;
     }
-/*	*codechar++ = '\n'; */
     
     return codechar - code_out;
 }
