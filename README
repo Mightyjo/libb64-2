@@ -139,7 +139,7 @@ The base64 encoding and decoding functionality in this package is implemented
 in exactly this way, providing both a high-speed high-maintanence C interface,
 and a wrapped C++ which is low-maintanence and only slightly less performant.
 
-Langley here: Chris does himself a dis-service in his discussion above.  He 
+Langley here: Chris does himself a disservice in his discussion above.  He 
 realized that case statements can not only cross into sub-blocks, but can
 jump past the initial checks of conditional loops to the first trip through
 the loop starts on a given line.  Take a look at line 16 in the listing above.
