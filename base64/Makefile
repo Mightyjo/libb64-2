@@ -33,7 +33,7 @@ vpath %.h ../include/b64
 
 all: $(TARGETS) #strip
 
-base64: libb64.a
+base64:
 
 strip:
 	strip $(BINARIES) *.exe

@@ -1,3 +1,4 @@
+.PHONY: all base64 clean clean_include clean_base64 distclean distclean_base64
 all: base64
 
 base64:
