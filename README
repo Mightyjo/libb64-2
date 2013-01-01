@@ -1,9 +1,9 @@
-b64: Base64 Encoding/Decoding Routines
+libb64-2: RFC4648 Base64 Encoding/Decoding Routines
 ======================================
 
 Overview:
 --------
-libb64 is a header library of ANSI C routines for fast encoding/decoding data
+libb64-2 is a header library of ANSI C routines for fast encoding/decoding data
 into and from a base64-encoded format. C++ wrappers are included, as well as
 the source code for standalone encoding and decoding executables.
 
@@ -89,7 +89,7 @@ Tatham: http://www.chiark.greenend.org.uk/~sgtatham/coroutines.html
 
 For example, an RLE decompressing routine, adapted from the article:
 1	static int STATE = 0;
-2	static int len, c;
+2	static int len = 0, c;
 3	switch (STATE)
 4	{
 5		while (1)
@@ -138,3 +138,20 @@ use.
 The base64 encoding and decoding functionality in this package is implemented
 in exactly this way, providing both a high-speed high-maintanence C interface,
 and a wrapped C++ which is low-maintanence and only slightly less performant.
+
+Langley here: Chris does himself a dis-service in his discussion above.  He 
+realized that case statements can not only cross into sub-blocks, but can
+jump past the initial checks of conditional loops to the first trip through
+the loop starts on a given line.  Take a look at line 16 in the listing above.
+In spite of the condition's syntactic placement at the top of the while loop,
+the 'len-- != 0' condition is checked at the bottom of the block, too. In the
+co-routine model, this is acutally a do..while().  Neat, isn't it?
+
+On the first call to the RLE decompression routine, the switch jumps to line
+16. The inner while(len--) loop condition breaks on line 17, falls through to
+the end of the 'while(1)' loop at line 23, then jumps back to the top of the
+while(1) loop - which was skipped by the switch - and consumes the first cha-
+racter of input.
+
+Chris is correct when he says the C code is high-maintenance.  It's also quite
+elegant.  The more you know...
