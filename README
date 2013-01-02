@@ -139,13 +139,12 @@ The base64 encoding and decoding functionality in this package is implemented
 in exactly this way, providing both a high-speed high-maintanence C interface,
 and a wrapped C++ which is low-maintanence and only slightly less performant.
 
-Langley here: Chris does himself a disservice in his discussion above.  He 
-realized that case statements can not only cross into sub-blocks, but can
-jump past the initial checks of conditional loops to the first trip through
-the loop starts on a given line.  Take a look at line 16 in the listing above.
-In spite of the condition's syntactic placement at the top of the while loop,
-the 'len-- != 0' condition is checked at the bottom of the block, too. In the
-co-routine model, this is acutally a do..while().  Neat, isn't it?
+Langley here: Notic that case statements can not only cross into sub-blocks,
+but can jump past the initial checks of conditional loops to the first trip
+through the loop starts on a given line.  Take a look at line 16 in the listing
+above.  In spite of the condition's syntactic placement at the top of the while
+loop, the 'len-- != 0' condition is checked at the bottom of the block, too. In
+the co-routine model, this is acutally a do..while().  Neat, isn't it?
 
 On the first call to the RLE decompression routine, the switch jumps to line
 16. The inner while(len--) loop condition breaks on line 17, falls through to
