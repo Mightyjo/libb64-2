@@ -116,7 +116,7 @@ For example, an RLE decompressing routine, adapted from the article:
 As can be seen from this example, a coroutine depends on a state variable,
 which it sets directly before exiting (lines 14 and 119). The next time the
 routine is entered, the switch moves control to the specific point directly
-after the previous exit (lines 16 and 21).hands
+after the previous exit (lines 16 and 21).
 
 (As an aside, in the mentioned article the combination of the top-level switch,
 the various setting of the state, the return of a value, and the labelling of
@@ -139,18 +139,18 @@ The base64 encoding and decoding functionality in this package is implemented
 in exactly this way, providing both a high-speed high-maintanence C interface,
 and a wrapped C++ which is low-maintanence and only slightly less performant.
 
-Langley here: Notic that case statements can not only cross into sub-blocks,
-but can jump past the initial checks of conditional loops to the first trip
-through the loop starts on a given line.  Take a look at line 16 in the listing
-above.  In spite of the condition's syntactic placement at the top of the while
-loop, the 'len-- != 0' condition is checked at the bottom of the block, too. In
-the co-routine model, this is acutally a do..while().  Neat, isn't it?
+Langley here: Notice that case statements can not only cross into sub-blocks,
+but can jump past the initial checks of conditional loops so the first trip
+through a loop starts on a chosen line.  Let's take a walk through the pre-
+ceding code.
 
 On the first call to the RLE decompression routine, the switch jumps to line
-16. The inner while(len--) loop condition breaks on line 17, falls through to
-the end of the 'while(1)' loop at line 23, then jumps back to the top of the
-while(1) loop - which was skipped by the switch - and consumes the first cha-
-racter of input.
+16. Control immediately hits the unconditonal jump back to line 12, where the
+while(len--) loop terminates. Control falls through to line 23, then jumps back
+to the top of the while(1) loop - which was skipped by the switch - and con-
+sumes the first character of input.
 
 Chris is correct when he says the C code is high-maintenance.  It's also quite
-elegant.  The more you know...
+a lot of fun.  Of course, you don't have to put the first case statement inside
+the main loop, Tatham doesn't in his examples, but now you know you can and
+knowing is half the battle.
