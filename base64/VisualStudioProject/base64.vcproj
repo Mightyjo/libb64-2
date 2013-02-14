@@ -39,7 +39,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Users\Joe\Downloads\libb64-1.2.src\libb64-2.0\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BUFFERSIZE=16777216"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -110,6 +110,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;BUFFERSIZE=16777216"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"

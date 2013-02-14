@@ -76,8 +76,12 @@ int base64_decode_value( char value_in ) {
      * position of ASCII '=', the padding character specified by RFC4648.
      * Finding that means we're in the padding at the end of an encoded
      * stream.
+     *
+     * Oh, signed_value_in is needed for portability to architectures that
+     * treat char as unsigned by default (e.g. PowerPC).  Can't very well
+     * test for sub-zero unsigned chars.
      */
-    static const char decoding[] = {
+    static const signed char decoding[] = {
         62,-1,-1,-1,63,52,53,54,55,56,57,58,59,60,
         61,-1,-1,-1,-2,-1,-1,-1, 0, 1, 2, 3, 4, 5,
          6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,
@@ -85,13 +89,13 @@ int base64_decode_value( char value_in ) {
         28,29,30,31,32,33,34,35,36,37,38,39,40,41,
         42,43,44,45,46,47,48,49,50,51
     };
-    static const char decoding_size = sizeof(decoding);
-    value_in -= 43; /* ASCII '+' == 43 */
-    if (value_in < 0 || value_in > decoding_size) {
+    static const signed char decoding_size = sizeof(decoding);
+    signed char signed_value_in = (signed char)value_in - 43; /* ASCII '+' == 43 */
+    if (signed_value_in < 0 || signed_value_in > decoding_size) {
         return -1; /* This handles any input less than '+' or greater */
                    /* than 'z'.                                       */
     }
-    return decoding[(int)value_in];
+    return decoding[(int)signed_value_in];
 }
 
 void base64_init_decodestate( base64_decodestate* state_in ) {
@@ -107,7 +111,8 @@ int base64_decode_block( const char* code_in,
 
     const char* codechar = code_in;
     char* plainchar = plaintext_out;
-    char fragment;
+    /* Make fragment explicitly signed for portability. */
+    signed char fragment;
     
     *plainchar = state_in->plainchar;
     
@@ -128,7 +133,7 @@ int base64_decode_block( const char* code_in,
                     return plainchar - plaintext_out;
                 }
                 /* Handle any encoded character */
-                fragment = (char)base64_decode_value(*codechar++);
+                fragment = (signed char)base64_decode_value(*codechar++);
                 if( fragment == -1 ) goto error; /* Invalid encoding found   */
             } while( fragment < -1 ); /* Loop through the padding at the end */
                                       /* of an encoded block.                */
@@ -142,7 +147,7 @@ int base64_decode_block( const char* code_in,
                     state_in->plainchar = *plainchar;
                     return plainchar - plaintext_out;
                 }
-                fragment = (char)base64_decode_value(*codechar++);
+                fragment = (signed char)base64_decode_value(*codechar++);
                 if( fragment == -1 ) goto error;
             } while( fragment < -1 );
             /* Get the two least significant bits of the first encoded octet */
@@ -157,7 +162,7 @@ int base64_decode_block( const char* code_in,
                     state_in->plainchar = *plainchar;
                     return plainchar - plaintext_out;
                 }
-                fragment = (char)base64_decode_value(*codechar++);
+                fragment = (signed char)base64_decode_value(*codechar++);
                 if( fragment == -1 ) goto error;
             } while( fragment < -1 );
             /* Get the four lsb of the second encoded octet */
@@ -172,7 +177,7 @@ int base64_decode_block( const char* code_in,
                     state_in->plainchar = *plainchar;
                     return plainchar - plaintext_out;
                 }
-                fragment = (char)base64_decode_value(*codechar++);
+                fragment = (signed char)base64_decode_value(*codechar++);
                 if( fragment == -1 ) goto error;
             } while( fragment < -1 );
             /* Ger the four lsb of the third encoded octet */
